@@ -1,0 +1,2 @@
+# Cadastre os cases em aguardo de chamado antes de distribuir.
+# Um número por linha. Esta cópia para publicação não contém dados reais.
