@@ -86,8 +86,15 @@ def criar_painel(livro, cases, nomes, origem, aba, agora, excluidos, ausentes):
     fundo(resumo, end)
     texto(resumo, 'B2:L3', 'Resumo da distribuição', 24, TEAL, True)
     texto(resumo, 'B4:L4', 'Registro inicial da execução. O acompanhamento do dia está na aba Gestor.', color=MUTED)
-    labels = ['Base de origem', 'Aba de origem', 'Gerado em', 'Cases recebidos',
-              'Excluídos: aguardo de chamado', 'Cases distribuídos', 'Pessoas informadas']
+    labels = [
+        "Base de entrada",
+        "Aba de origem",
+        "Gerado em",
+        "Cases recebidos",
+        "Cases em espera",
+        "Cases distribuídos",
+        "Pessoas informadas",
+    ]
     values = [origem.name, aba, agora, len(cases)+len(excluidos), len(excluidos), len(cases), n]
     for r, label, value in zip(range(6,13), labels, values):
         texto(resumo, f'B{r}:E{r}', label, color=MUTED)
@@ -113,7 +120,13 @@ def criar_painel(livro, cases, nomes, origem, aba, agora, excluidos, ausentes):
         texto(resumo, f'B{r}:D{r}', dia).number_format = 'dd/mm/yyyy'
         literal(resumo, f'E{r}:I{r}', nome)
         texto(resumo, f'J{r}:L{r}', qtd)
-    texto(resumo, f'B{excl_header}:L{excl_header}', 'EXCLUÍDOS — AGUARDO DE CHAMADO', bold=True, fill=CARD)
+    texto(
+        resumo,
+        f'B{excl_header}:L{excl_header}',
+        'CASES EM ESPERA — NÃO DISTRIBUÍDOS',
+        bold=True,
+        fill=CARD,
+    )
     for r, case in enumerate(excluidos, excl_header+1):
         literal(resumo, f'B{r}:D{r}', case.numero)
         texto(resumo, f'E{r}:H{r}', case.abertura).number_format = 'dd/mm/yyyy hh:mm:ss'
@@ -124,7 +137,14 @@ def criar_painel(livro, cases, nomes, origem, aba, agora, excluidos, ausentes):
         literal(resumo, f'B{r}:L{r}', numero)
     if not ausentes:
         texto(resumo, f'B{missing_header+1}:L{missing_header+1}', 'Nenhuma.', color=MUTED)
-    texto(resumo, f'B{end-1}:L{end}', 'A base original foi preservada. DATA DE MODIFICAÇÃO é a data importada do Creatio; não registra as edições desta tracking.', color=MUTED)
+    texto(
+        resumo,
+        f'B{end-1}:L{end}',
+        'A base original foi preservada. DATA DE MODIFICAÇÃO corresponde '
+        'ao valor informado na base de entrada e não registra as edições '
+        'realizadas nesta tracking.',
+        color=MUTED,
+    )
 
     # A tracking continua com as sete colunas combinadas. Status por lista reduz erros.
     last = len(cases)+1

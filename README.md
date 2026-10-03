@@ -1,191 +1,369 @@
-# Tracking operacional de cases
+<div align="center">
 
-Ferramenta local em Python para distribuir uma base exportada do Creatio e acompanhar o trabalho da equipe em Excel. Os cases entram em ordem de abertura, do mais antigo para o mais recente, e recebem responsáveis de forma equilibrada.
+# Tracking de Cases
 
-O Creatio continua sendo o sistema oficial de atendimento. A versão 3 trabalha com arquivos e preenchimento manual da tracking. Não acessa APIs, não executa resgates e não altera os atendimentos no Creatio.
+**Distribuição equilibrada, acompanhamento operacional e visão gerencial em Excel.**
 
-![Painel do gestor com dados fictícios](docs/imagens/painel_gestor.png)
+Ferramenta local desenvolvida em Python para organizar uma base de cases, distribuir o trabalho entre responsáveis e gerar uma tracking com dashboard gerencial e relatórios.
 
-*Demonstração com 40 cases fictícios. Os números da imagem não representam resultados da operação.*
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Excel](https://img.shields.io/badge/Excel-XLSM-217346?logo=microsoft-excel&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## Documentação
+</div>
 
-- [Guia passo a passo em Word](docs/Guia_Tracking_Cases.docx)
-- [Apresentação da ferramenta](docs/Apresentacao_Tracking_Cases.pptx)
+---
 
-## O que a versão atual faz
+![Painel do gestor](docs/imagens/painel_gestor.png)
 
-- Importa `.xlsx` com colunas adicionais e utiliza apenas o número do case e as datas de abertura e modificação.
-- Exclui os números cadastrados em uma lista local de cases em aguardo de chamado.
-- Ordena por data e hora de abertura e alterna continuamente os responsáveis.
-- Gera uma planilha `.xlsm` com as abas **Gestor**, **Tracking** e **Resumo**.
-- Atualiza os indicadores do gestor por fórmulas quando a Tracking muda.
-- Gera e abre um PDF pelo botão da aba Gestor no Excel instalado.
-- Atualiza uma tracking da versão 2 em uma nova cópia, preservando os dados preenchidos.
+> Demonstração utilizando dados inteiramente fictícios.
 
-## Requisitos
+## Sobre o projeto
 
-| Uso | Requisito |
-| --- | --- |
-| Distribuir ou atualizar o painel | Windows e Python 3.10 ou mais recente disponível no computador |
-| Acompanhar as fórmulas | Excel 2019 ou mais recente, ou Microsoft 365 compatível |
-| Usar o botão de PDF | Excel instalado e execução das macros permitida pela empresa |
-| Trabalhar em equipe | Mesmo arquivo no SharePoint Online ou OneDrive, com edição e coautoria disponíveis |
+O **Tracking de Cases** foi desenvolvido para facilitar a distribuição e o acompanhamento diário de demandas operacionais.
 
-As bibliotecas Python acompanham o programa em `Programa/bibliotecas`. A execução não instala pacotes, não usa rede e não solicita administrador. Python e Excel precisam estar disponíveis previamente. A alternativa de PDF em Python usa as fontes Arial presentes no Windows.
+A ferramenta recebe uma base em Excel, valida os campos necessários, organiza os cases pela data de abertura e realiza uma distribuição equilibrada entre os responsáveis cadastrados.
+
+Ao final, é gerada uma nova planilha contendo:
+
+- tracking operacional;
+- responsáveis por case;
+- controle de status;
+- motivos e observações;
+- acompanhamento de escalonamentos;
+- dashboard gerencial;
+- indicadores por responsável;
+- alertas de preenchimento;
+- geração de resumo em PDF.
+
+A aplicação funciona localmente e não depende de integrações externas para realizar a distribuição.
+
+---
+
+## Fluxo
+
+```text
+Base .xlsx
+    ↓
+Validação dos dados
+    ↓
+Cases em espera
+    ↓
+Ordenação por abertura
+    ↓
+Distribuição equilibrada
+    ↓
+Tracking .xlsm
+    ↓
+Dashboard do gestor
+    ↓
+Resumo em PDF
+```
+
+---
+
+## Principais funcionalidades
+
+### Distribuição automática
+
+Os cases são ordenados pela data e hora de abertura, do mais antigo para o mais recente.
+
+A distribuição ocorre de forma alternada entre os responsáveis informados.
+
+A diferença inicial entre as quantidades atribuídas é de, no máximo, um case.
+
+### Tracking operacional
+
+A planilha gerada utiliza as seguintes colunas:
+
+```text
+CASE
+DATA DE ABERTURA
+DATA DE MODIFICAÇÃO
+STATUS
+MOTIVO
+OBSERVAÇÃO
+RESPONSÁVEL
+```
+
+Os campos de acompanhamento podem ser atualizados pela equipe durante o dia.
+
+### Dashboard gerencial
+
+A aba **Gestor** oferece uma visão consolidada da tracking.
+
+É possível visualizar toda a equipe ou selecionar um responsável específico.
+
+O painel apresenta:
+
+| Indicador | Descrição |
+|---|---|
+| Distribuídos | Total atribuído |
+| Concluídos | Cases finalizados |
+| Ainda abertos | Cases não concluídos |
+| Pendentes | Ainda não iniciados |
+| Em andamento | Atualmente em tratamento |
+| Revisar depois | Cases marcados para retomada |
+| Escalados | Cases aguardando apoio ou retorno |
+| Conclusão | Percentual concluído |
+| Mais antigo aberto | Data do case aberto mais antigo |
+
+O dashboard também identifica inconsistências como status inválidos, responsáveis desconhecidos e cases escalados sem observação.
+
+---
+
+## Interface
+
+<table>
+<tr>
+<td align="center"><strong>Dashboard</strong></td>
+<td align="center"><strong>Tracking</strong></td>
+</tr>
+<tr>
+<td><img src="docs/imagens/painel_gestor.png" alt="Dashboard"></td>
+<td><img src="docs/imagens/tracking.png" alt="Tracking"></td>
+</tr>
+</table>
+
+---
+
+## Status
+
+| Status | Significado |
+|---|---|
+| **Pendente** | Ainda não iniciado |
+| **Em andamento** | Em tratamento |
+| **Concluído** | Finalizado |
+| **Revisar depois** | Deve ser retomado posteriormente |
+| **Escalado** | Aguarda apoio ou retorno |
+
+Para cases escalados, o destino e o contexto podem ser informados em **OBSERVAÇÃO**.
+
+Exemplo:
+
+```text
+Escalado para: Equipe Financeira — aguardando retorno.
+```
+
+O escalonamento é registrado apenas na tracking. A aplicação não executa ações em sistemas externos.
+
+---
+
+## Tecnologias
+
+| Tecnologia | Finalidade |
+|---|---|
+| Python 3.10+ | Processamento e automação |
+| openpyxl | Manipulação das planilhas |
+| Excel / XLSM | Tracking e dashboard |
+| VBA | Exportação do painel para PDF |
+| FPDF | Geração alternativa de relatórios |
+
+As dependências utilizadas pela versão operacional acompanham o programa em `Programa/bibliotecas`.
+
+A execução não instala pacotes, não utiliza rede e não solicita privilégios administrativos.
+
+---
 
 ## Início rápido
 
-1. Baixe e extraia a pasta completa do projeto.
-2. Exporte a base do Creatio em `.xlsx` e salve-a em uma pasta local.
-3. Edite `Programa/Cases_nao_distribuir.txt`: informe os cases em aguardo de chamado, um número por linha. **A cópia para publicação vem vazia.**
-4. Abra `Programa/Iniciar.bat`.
-5. Cole o caminho completo da base, por exemplo `C:\Bases\casos_do_dia.xlsx`.
-6. Informe a quantidade de pessoas e o nome de cada uma, na ordem desejada.
-7. Confira o resultado informado e abra o arquivo em `Programa/Saidas/<execucao>/Resgate_DD-MM.xlsm`.
-8. Confira a aba **Resumo** e comece a atualizar a **Tracking**.
+### 1. Baixe o projeto
 
-Cada execução cria sua própria pasta. Uma nova distribuição começa com todos os status como **Pendente**. Para acompanhar um lote que já começou, continue usando sua tracking existente.
+Clone ou baixe o repositório e mantenha sua estrutura de pastas.
 
-## Teste com dados fictícios
+### 2. Prepare a base
 
-A pasta `exemplos` contém uma [base criada do zero](exemplos/Base_Ficticia_Creatio.xlsx), com 42 cases numéricos, datas fora de ordem e colunas adicionais. Nenhum registro veio de uma exportação real. Consulte o [roteiro de teste](exemplos/COMO_TESTAR.md).
+A entrada deve ser um arquivo `.xlsx`.
 
-Com cinco nomes e a lista `exemplos/exclusoes_demo.txt`, o resultado esperado é: **42 recebidos, 2 excluídos e 40 distribuídos, 8 por pessoa**. Um terceiro número da lista é propositalmente ausente para testar o aviso. A distribuição começa com 40 pendentes. As imagens da documentação simulam uma etapa posterior do dia, com status preenchidos manualmente.
+Os seguintes campos são reconhecidos:
 
-```powershell
-python Programa/distribuir_cases.py "exemplos/Base_Ficticia_Creatio.xlsx" --analistas "Ana" "Bruno" "Carla" "Diego" "Elisa" --exclusoes "exemplos/exclusoes_demo.txt" --sem-pausa
-```
-
-## Formato da base
-
-| Informação | Cabeçalhos reconhecidos |
-| --- | --- |
-| Número do case | `CASE` ou `Número do caso` |
+| Informação | Cabeçalhos |
+|---|---|
+| Case | `CASE` ou `Número do caso` |
 | Abertura | `DATA DE ABERTURA` |
 | Modificação | `DATA DE MODIFICAÇÃO` ou `Modificado em` |
 
-O programa normaliza caixa, espaços e acentos dos cabeçalhos. Os cases devem conter apenas números. Mantenha-os como texto no Excel quando houver zeros à esquerda. Preserve as datas válidas da exportação. Se houver mais de uma aba compatível, selecione a aba solicitada ou use `--aba`.
+Outras colunas podem existir normalmente e são ignoradas durante a distribuição.
 
-Colunas adicionais ficam fora da tracking. As sete colunas de saída são:
+### 3. Configure cases em espera
+
+Caso algum case não deva entrar na distribuição atual, adicione seu número em:
 
 ```text
-CASE | DATA DE ABERTURA | DATA DE MODIFICAÇÃO | STATUS | MOTIVO | OBSERVAÇÃO | RESPONSÁVEL
+Programa/Cases_em_espera.txt
 ```
 
-`DATA DE MODIFICAÇÃO` é a data importada do Creatio, não a hora em que alguém editou a tracking.
+Um número por linha.
 
-## Regra de distribuição
+### 4. Execute
 
-Após remover as exclusões, o programa ordena todos os cases por data e hora de abertura. O primeiro vai para a primeira pessoa, o segundo para a segunda, e assim por diante. Ao chegar ao último nome, a alternância recomeça. A alternância continua mesmo quando a data muda.
+Abra:
 
-A diferença inicial entre as quantidades é de no máximo um case. Em empates de abertura, a ordem original da exportação é mantida. A regra equilibra **quantidade**, não complexidade ou tempo de trabalho. Nesta versão não há equipes separadas por faixas de datas.
+```text
+Programa/Iniciar.bat
+```
 
-## Como usar durante o dia
+Informe o caminho da base e os nomes dos responsáveis.
 
-### Analista
+### 5. Abra a tracking
 
-Na aba **Tracking**, filtre `RESPONSÁVEL` pelo seu nome e mantenha a ordem crescente de abertura. Atualize `STATUS`, `MOTIVO` e `OBSERVAÇÃO`. O filtro facilita a visualização, mas não restringe o acesso aos registros das outras pessoas.
+O resultado será criado em:
 
-| Status | Significado |
-| --- | --- |
-| Pendente | Ainda não iniciado |
-| Em andamento | Case em tratamento |
-| Concluído | Tratamento finalizado |
-| Revisar depois | Continua aberto com o mesmo responsável para retomada |
-| Escalado | Continua aberto e aguarda apoio ou retorno |
+```text
+Programa/Saidas/<execucao>/
+```
 
-Ao escalar, registre o destino e o contexto em `OBSERVAÇÃO`, por exemplo: `Escalado para: Equipe Financeira - aguardando retorno.` A mudança de status registra o escalonamento no tracking. Ela não envia mensagem nem transfere o case no Creatio.
+com o nome:
 
-### Gestor
+```text
+Tracking_DD-MM.xlsm
+```
 
-Na aba **Gestor**, escolha `Toda a equipe` ou um nome no campo **Visualizar**. O filtro altera os indicadores e alertas do analista. A tabela de distribuição continua mostrando toda a equipe.
+---
 
-O painel exibe distribuídos, concluídos, ainda abertos, pendentes, em andamento, para revisão, escalados, percentual de conclusão e a data da abertura mais antiga ainda em aberto. Os alertas ajudam a encontrar status vazios ou fora da lista, escalados sem observação e responsáveis não cadastrados. O último alerta sempre considera a equipe inteira.
+## Exemplo de distribuição
 
-**Ainda abertos = distribuídos − concluídos.** Revisões e escalonamentos já fazem parte dos abertos. A aba **Resumo** preserva a distribuição inicial e a conferência das exclusões. Ela não é o painel de status atual.
+Com três responsáveis:
 
-### PDF com um clique
+```text
+Case 01 → Ana
+Case 02 → Bruno
+Case 03 → Carla
+Case 04 → Ana
+Case 05 → Bruno
+Case 06 → Carla
+```
 
-1. Abra a planilha no Excel instalado, com as macros permitidas no ambiente da empresa.
-2. Na aba Gestor, selecione a equipe ou o analista.
-3. Clique em **GERAR RESUMO PDF**.
-4. O Excel recalcula a visão atual, salva e abre o PDF.
+A alternância continua mesmo quando a data de abertura muda.
 
-Os arquivos ficam em `Relatorios_PDF`, ao lado da planilha, com data e hora no nome. Se o Excel abrir a planilha por um endereço web do SharePoint, o destino usado pelo botão é `Documents/Relatorios_PDF` na pasta do usuário do Windows. O PDF reflete os dados do arquivo aberto, inclusive edições ainda não salvas, e o filtro escolhido.
+Em casos com a mesma data e horário, a ordem original da base é preservada.
 
-O [Excel no navegador não executa VBA](https://support.microsoft.com/en-us/excel/work-with-vba-macros-in-excel-for-the-web). Preserve o formato `.xlsm` para manter o botão. Se houver bloqueio corporativo de macros, siga a orientação da TI. Não é necessário alterar a segurança do Excel para usar as fórmulas do painel.
+A distribuição equilibra quantidade, não complexidade.
 
-Como alternativa, `Programa/Gerar_PDF.bat` lê uma planilha `.xlsx` ou `.xlsm` salva e gera um relatório de todos os registros. Essa alternativa não considera o filtro visual do gestor.
+---
+
+## Teste com dados fictícios
+
+O projeto pode incluir:
+
+```text
+exemplos/Base_Ficticia_Cases.xlsx
+```
+
+com registros criados exclusivamente para demonstração.
+
+Exemplo:
+
+```powershell
+python Programa/distribuir_cases.py "exemplos/Base_Ficticia_Cases.xlsx" --analistas "Ana" "Bruno" "Carla" "Diego" "Elisa" --em-espera "exemplos/exclusoes_demo.txt" --sem-pausa
+```
+
+Consulte também:
+
+[exemplos/COMO_TESTAR.md](exemplos/COMO_TESTAR.md)
+
+---
+
+## PDF
+
+O dashboard pode ser exportado para PDF diretamente pelo Excel.
+
+No aplicativo desktop:
+
+```text
+Gestor → GERAR RESUMO PDF
+```
+
+Os arquivos são gravados em:
+
+```text
+Relatorios_PDF/
+```
+
+Existe também uma alternativa em Python:
+
+```text
+Programa/Gerar_PDF.bat
+```
+
+---
 
 ## Uso compartilhado
 
-O programa gera um arquivo local. Para acompanhamento da equipe, coloque a tracking em uma biblioteca autorizada do SharePoint Online ou OneDrive e compartilhe o **mesmo arquivo**, com permissão de edição e coautoria. Confirme a sincronização antes de emitir o relatório. Cópias locais e anexos separados não se atualizam entre si.
+O arquivo final pode ser armazenado em uma solução compatível com edição colaborativa.
 
-A configuração do ambiente fica a cargo da empresa. A ferramenta não publica arquivos, não faz login e não configura permissões. Consulte os [requisitos de coautoria da Microsoft](https://support.microsoft.com/pt-br/excel/get-started/collaborate-on-excel-workbooks-at-the-same-time-with-co-authoring).
+Para evitar divergências, todos os usuários devem trabalhar sobre o mesmo arquivo.
 
-## Atualizar um arquivo da versão 2
+A aplicação não realiza upload, autenticação ou configuração de permissões automaticamente.
 
-Abra `Programa/Atualizar_Painel.bat` e cole o caminho do `.xlsx` da versão 2. O programa cria outra cópia em `.xlsm`, preservando a Tracking, a equipe e o Resumo original. Confira a nova cópia antes de adotá-la. Esse procedimento não redistribui os cases.
-
-## Uso pela linha de comando
-
-Execute a partir da raiz deste projeto, com Python disponível:
-
-```powershell
-python Programa/distribuir_cases.py "C:\Bases\casos_do_dia.xlsx" --analistas "Ana" "Bruno" "Carla" --aba "Caso" --sem-pausa
-```
-
-Os parâmetros `--saida` e `--exclusoes` aceitam caminhos para outra pasta de saída e outra lista de exclusões. Use `python Programa/distribuir_cases.py --help` para consultar as opções. Caminhos e nomes com espaços devem ficar entre aspas.
+---
 
 ## Estrutura
 
 ```text
-README.md
-.gitignore
-docs/
-  Guia_Tracking_Cases.docx
-  Apresentacao_Tracking_Cases.pptx
-  imagens/painel_gestor.png
-  imagens/tracking.png
-exemplos/
-  Base_Ficticia_Creatio.xlsx
-  exclusoes_demo.txt
-  COMO_TESTAR.md
-Programa/
-  Iniciar.bat
-  Atualizar_Painel.bat
-  Gerar_PDF.bat
-  distribuir_cases.py
-  painel_gestor.py
-  dashboard_gestor.py
-  atualizar_painel.py
-  gerar_relatorio.py
-  incluir_botao_pdf.py
-  Cases_nao_distribuir.txt
-  bibliotecas/
-  recursos/
+Ferramenta-de-tracking/
+│
+├── README.md
+├── LICENSE
+│
+├── docs/
+│   ├── Guia_Tracking_Cases.docx
+│   ├── Apresentacao_Tracking_Cases.pptx
+│   └── imagens/
+│       ├── painel_gestor.png
+│       └── tracking.png
+│
+├── exemplos/
+│   ├── Base_Ficticia_Cases.xlsx
+│   ├── exclusoes_demo.txt
+│   └── COMO_TESTAR.md
+│
+└── Programa/
+    ├── Iniciar.bat
+    ├── Atualizar_Painel.bat
+    ├── Gerar_PDF.bat
+    ├── distribuir_cases.py
+    ├── painel_gestor.py
+    ├── dashboard_gestor.py
+    ├── atualizar_painel.py
+    ├── gerar_relatorio.py
+    ├── incluir_botao_pdf.py
+    ├── Cases_em_espera.txt
+    ├── bibliotecas/
+    └── recursos/
 ```
 
-Mantenha `bibliotecas` e `recursos` junto dos scripts. O código VBA do botão está em `Programa/recursos/RelatorioGestor.bas`; o projeto compilado está em `vbaProject.bin`. Editar o `.bas` isoladamente não atualiza o binário já incorporado às planilhas.
+---
 
-## Problemas comuns
+## Limitações atuais
 
-| Situação | O que conferir |
-| --- | --- |
-| Python não encontrado | Disponibilidade de Python 3.10+ autorizado no computador |
-| Bibliotecas ou recursos ausentes | Extração completa do pacote, com todas as subpastas |
-| Cabeçalhos não reconhecidos | Aba e nomes dos três campos de entrada |
-| Painel não atualiza | Fórmulas > Opções de Cálculo > Automático e sincronização do arquivo compartilhado |
-| PDF não sai pelo botão | Excel instalado, macros permitidas e pasta de destino com escrita |
-| Contagem parece incorreta | Status fora da lista, filtro selecionado e alerta de responsáveis não cadastrados |
+A versão atual não possui autenticação, controle de acesso por responsável, registro automático de início e pausa, cálculo automático do tempo de tratamento, sincronização com sistemas externos ou execução agendada.
 
-## Limites e possíveis evoluções
+O dashboard é alimentado pelas atualizações realizadas na própria tracking.
 
-A versão atual não tem login por analista, controle de acesso por linha, registro automático de início e pausa, cálculo de tempo de tratamento, sincronização com o Creatio ou execução agendada. O preenchimento da Tracking alimenta os indicadores.
+---
 
-Uma próxima etapa, sujeita à análise da TI e à disponibilidade e autorização das APIs, pode incluir leitura automática da base, execução às 6h de segunda a sexta e regras para equipes que tratem diferentes faixas de abertura. Essas funções ainda não estão implementadas. Benefícios de tempo e produtividade devem ser medidos em um piloto.
+## Segurança dos dados
 
-## Arquivos da operação
+O repositório público deve conter somente código, documentação, recursos da aplicação e dados fictícios.
 
-Esta pasta para publicação contém o programa, a documentação, imagens de demonstração e uma base inteiramente fictícia. A lista operacional de exclusões está vazia; a lista da pasta `exemplos` contém apenas números fictícios. Mantenha bases, resultados, relatórios e listas reais fora do repositório. O `.gitignore` ajuda a excluir resultados, mas não remove dados já adicionados ao histórico. Antes de publicar, confira também o conteúdo de `Cases_nao_distribuir.txt` se ele tiver sido editado localmente.
+Bases reais, trackings geradas, relatórios e listas operacionais não devem ser versionados.
+
+---
+
+## Licença
+
+Este projeto utiliza a licença **MIT**.
+
+Consulte [LICENSE](LICENSE).
+
+---
+
+<div align="center">
+
+Desenvolvido por **Pablo Santos**
+
+**Python · Excel · Automation**
+
+</div>

@@ -163,7 +163,14 @@ def gerar_pdf(caminho, pasta=None):
     if y+17>189:y=pagina('Conferência do acompanhamento')
     text(10,y+3,f"Status a corrigir: {stats['A corrigir']}  |  Sem responsável cadastrado: {dados['sem_cadastro']}  |  Conclusão: {closed/total:.0%}" if total else 'Nenhum case na tracking.',10,AMBER)
     if dados['recebidos'] is not None:
-        text(10,y+10,f"Distribuição inicial: {dados['recebidos']} recebidos | {dados['excluidos']} excluídos em aguardo de chamado.",9,MUTED)
+        text(
+            10,
+            y + 10,
+            f"Distribuição inicial: {dados['recebidos']} recebidos | "
+            f"{dados['excluidos']} mantidos em espera.",
+            9,
+            MUTED,
+        )
 
     escalados=[c for c in dados['cases'] if c['status']=='Escalado']
     if escalados:

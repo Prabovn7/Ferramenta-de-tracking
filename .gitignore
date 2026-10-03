@@ -13,3 +13,21 @@ __pycache__/
 *.py[cod]
 .venv/
 .env
+# Dados e arquivos gerados localmente
+Programa/Saidas/
+**/Relatorios_PDF/
+**/Painel_v3_*/
+
+*.xlsx
+!exemplos/Base_Ficticia_Cases.xlsx
+
+*.xlsm
+*.xls
+*.csv
+*.pdf
+
+~$*
+__pycache__/
+*.py[cod]
+.venv/
+.env

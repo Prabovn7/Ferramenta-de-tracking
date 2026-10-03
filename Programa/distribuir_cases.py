@@ -282,7 +282,7 @@ def salvar_resultado(cases: list[Case], nomes: list[str], origem: Path, aba: str
     agora = datetime.now()
     destino = pasta / (agora.strftime("%Y-%m-%d_%H-%M-%S_") + uuid4().hex[:8])
     destino.mkdir(parents=True, exist_ok=False)
-    arquivo = destino / agora.strftime("Resgate_%d-%m.xlsm")
+    arquivo = destino / agora.strftime("Tracking_%d-%m.xlsm")
     temporario = destino / "resultado.part"
     livro = Workbook()
     try:
@@ -331,8 +331,14 @@ def main() -> int:
     parser.add_argument("base", nargs="?", help="Caminho da base .xlsx")
     parser.add_argument("--analistas", nargs="+", help="Nomes, na ordem da distribuição")
     parser.add_argument("--aba", help="Nome da aba a importar")
-    parser.add_argument("--exclusoes", type=Path, default=PASTA_PROGRAMA / "Cases_nao_distribuir.txt",
-                        help="Lista de cases em aguardo de chamado, um número por linha")
+    parser.add_argument(
+        "--em-espera",
+        "--exclusoes",
+        dest="exclusoes",
+        type=Path,
+        default=PASTA_PROGRAMA / "Cases_em_espera.txt",
+        help="Lista de cases que não devem entrar na distribuição, um número por linha",
+    )
     parser.add_argument("--saida", type=Path, default=PASTA_PROGRAMA / "Saidas")
     parser.add_argument("--sem-pausa", action="store_true", help="Encerra sem pedir Enter")
     args = parser.parse_args()
@@ -353,7 +359,10 @@ def main() -> int:
                 caminho_informado = None
         print(f"\nAba: {aba} | Total recebido: {len(cases)} cases")
         cases, excluidos, ausentes = separar_exclusoes(cases, carregar_exclusoes(args.exclusoes))
-        print(f"Aguardo de chamado: {len(excluidos)} excluídos | Para distribuir: {len(cases)}")
+        print(
+            f"Cases em espera: {len(excluidos)} | "
+            f"Para distribuir: {len(cases)}"
+        )
         if ausentes:
             print(f"Aviso: {len(ausentes)} número(s) da lista de exclusões não aparecem nesta base.")
         if not cases:
