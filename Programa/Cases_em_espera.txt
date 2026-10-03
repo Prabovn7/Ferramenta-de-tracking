@@ -1,0 +1,3 @@
+# Cases que não devem entrar na distribuição atual.
+# Informe um número por linha.
+# Este arquivo público não contém dados reais.

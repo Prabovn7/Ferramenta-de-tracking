@@ -1,33 +1,23 @@
-# Arquivos da operação e resultados locais
-Programa/Saidas/
-**/Relatorios_PDF/
-**/Painel_v3_*/
-*.xlsx
-!exemplos/Base_Ficticia_Creatio.xlsx
-*.xlsm
-*.xls
-*.csv
-*.pdf
-~$*
-__pycache__/
-*.py[cod]
-.venv/
-.env
 # Dados e arquivos gerados localmente
 Programa/Saidas/
 **/Relatorios_PDF/
 **/Painel_v3_*/
 
+# Planilhas
 *.xlsx
 !exemplos/Base_Ficticia_Cases.xlsx
-
 *.xlsm
 *.xls
 *.csv
+
+# Relatórios
 *.pdf
 
+# Arquivos temporários
 ~$*
 __pycache__/
 *.py[cod]
+
+# Ambientes e configurações locais
 .venv/
 .env

@@ -1,102 +1,153 @@
 ﻿TRACKING DE CASES - VERSÃO 3.0
 
 INICIAR
-1. Extraia todo o ZIP para uma pasta do computador.
-2. Abra Iniciar.bat, cole o caminho da base exportada do Creatio.
-3. Informe a quantidade de pessoas e os nomes.
-4. Abra o Excel gerado na pasta Saidas. Cada execução usa uma pasta própria.
+
+1. Extraia todo o projeto para uma pasta do computador.
+2. Abra Iniciar.bat e informe o caminho da base .xlsx.
+3. Informe a quantidade de responsáveis e os nomes.
+4. Abra o Excel gerado na pasta Saidas.
+
+Cada execução utiliza uma pasta própria.
 
 ABAS DO EXCEL
-Gestor: filtro por analista/equipe, indicadores, progresso e alertas por fórmulas.
-O filtro muda os cartões e alertas; a tabela de equipe continua mostrando todos.
-O alerta de responsável não cadastrado sempre considera a equipe inteira.
-Tracking: os cases e as sete colunas combinadas. Use a lista de STATUS e
-preencha MOTIVO e OBSERVAÇÃO. Filtre RESPONSÁVEL para trabalhar na sua fila.
-Resumo: registro da distribuição inicial por pessoa/data, origem, exclusões
-aplicadas e exclusões não encontradas. Substitui o antigo resumo em TXT.
+
+Gestor
+Exibe indicadores, progresso, alertas e filtro por responsável ou equipe.
+
+Tracking
+Contém os cases distribuídos e os campos utilizados durante o acompanhamento.
+
+Resumo
+Registra a distribuição inicial, a base de entrada, os cases em espera e as
+informações utilizadas na execução.
 
 STATUS
-Pendente: ainda não iniciado.
-Em andamento: em tratamento.
-Concluído: case fechado.
-Revisar depois: continua aberto com o mesmo responsável.
-Escalado: continua aberto. Em OBSERVAÇÃO, registre equipe/pessoa e contexto:
+
+Pendente
+Case ainda não iniciado.
+
+Em andamento
+Case atualmente em tratamento.
+
+Concluído
+Case finalizado.
+
+Revisar depois
+Case que deve ser retomado posteriormente pelo mesmo responsável.
+
+Escalado
+Case aguardando apoio ou retorno.
+
+Ao escalar, registre o destino e o contexto em OBSERVAÇÃO.
+
+Exemplo:
+
 Escalado para: Equipe Financeira - aguardando retorno.
 
-Ainda abertos = distribuídos menos concluídos. Revisão e escalonamento
-fazem parte dos abertos. Não some novamente esses grupos ao total de abertos.
-Use exatamente os status da lista. Textos diferentes ou células vazias
-aparecem como "Status a corrigir" no painel e no PDF. Se colar dados,
-confira os alertas, pois a colagem pode contornar a validação do Excel.
-O painel por pessoa mostra a atribuição atual; Resumo preserva a inicial.
-Os nomes da equipe são definidos na distribuição. Não altere as fórmulas.
+Ainda abertos = distribuídos - concluídos.
 
-ACOMPANHAMENTO DA EQUIPE
-Todos devem abrir o MESMO arquivo no SharePoint Online ou OneDrive, com
-permissão de edição e coautoria disponível no Excel da empresa. Prefira o
-Excel no navegador quando todos forem trabalhar juntos. Aguarde o salvamento.
-Cópias individuais, anexos enviados e pastas locais não sincronizam entre si.
-Esta versão cria um arquivo local; não publica, configura nem autentica
-SharePoint. Sem API, o painel acompanha o preenchimento manual da Tracking.
-Mantenha o cálculo automático do Excel. Se ele tiver sido desativado,
-use Fórmulas > Opções de Cálculo > Automático.
-Referência Microsoft:
-https://support.microsoft.com/pt-br/excel/get-started/collaborate-on-excel-workbooks-at-the-same-time-with-co-authoring
+Cases em revisão e cases escalados permanecem contabilizados como abertos.
 
-PDF COM UM CLIQUE
-Na aba Gestor, escolha Toda a equipe ou um analista e clique em
-GERAR RESUMO PDF. O Excel recalcula o painel, gera o PDF e abre o arquivo.
-O relatório mostra os dados atuais do arquivo aberto, inclusive alterações
-que ainda não tenham sido salvas. O filtro selecionado aparece no PDF.
-Os PDFs ficam em Relatorios_PDF, ao lado da planilha, com data/hora e nome
-único. Se o arquivo foi aberto por um endereço web do SharePoint, a saída
-fica em Documents/Relatorios_PDF dentro da pasta do seu usuário do Windows.
-O arquivo gerado é .XLSM para preservar a ação do botão.
+Use apenas os status disponibilizados pela lista da planilha. Valores
+diferentes ou células vazias podem aparecer como "Status a corrigir" no painel.
 
-O BOTÃO USA VBA E PRECISA DO EXCEL INSTALADO
-O Excel no navegador permite editar o arquivo, mas não executa o botão VBA.
-Abra no aplicativo da área de trabalho para gerar o PDF. A empresa precisa
-permitir a execução dessas macros; a ferramenta não altera configurações de
-segurança, não solicita administrador e não contorna bloqueios corporativos.
-O painel usa fórmulas nativas (incluindo MINIFS, disponível no Excel 2019+
-e Microsoft 365) e recalcula mesmo sem executar o botão.
-Não salve como .xlsx: esse formato remove o projeto VBA.
+DISTRIBUIÇÃO
 
-Alternativa: o Gerar_PDF.bat foi mantido para exportar um relatório de todos
-os registros salvos. Ele aceita .xlsx e .xlsm, e não considera o filtro visual.
+Os cases são organizados pela data e hora de abertura, do mais antigo para
+o mais recente.
 
-ATUALIZAR UMA TRACKING DA VERSÃO 2
-Abra Atualizar_Painel.bat e cole o caminho do arquivo .xlsx da versão 2.
-A ferramenta cria uma nova cópia .xlsm, mantendo todos os dados da Tracking,
-a equipe e o Resumo original. Não redistribui nem zera os status preenchidos.
-Mantenha o original até conferir a nova cópia.
+A distribuição ocorre de forma alternada entre os responsáveis informados.
 
-DISTRIBUIÇÃO E EXCLUSÕES
-Ordem crescente da data/hora de abertura, alternância contínua entre pessoas.
-A diferença de quantidade inicial é de no máximo 1. Empates mantêm a ordem
-da exportação. Em Cases_nao_distribuir.txt, mantenha os números em aguardo de
-chamado, um por linha. A equipe deve remover da lista quando puder distribuir.
-A identificação de aguardo não é automática. A lista desta cópia para publicação está vazia.
-Cadastre os números locais antes de distribuir. A aba Resumo informa quais foram encontrados.
+A diferença inicial de quantidade entre os responsáveis é de, no máximo,
+um case.
 
-CAMPOS E LIMITES DESTA VERSÃO
-A tracking tem exatamente: CASE | DATA DE ABERTURA | DATA DE MODIFICAÇÃO |
-STATUS | MOTIVO | OBSERVAÇÃO | RESPONSÁVEL.
-Da exportação, apenas número e datas são importados. Outros campos são ignorados.
-Número do caso e Modificado em são reconhecidos como nomes alternativos.
-DATA DE MODIFICAÇÃO continua sendo a data exportada do Creatio; não é um
-histórico de edição da tracking. Não há registro automático de início/fim ou
-cálculo de tempo de tratamento nesta versão. Não redistribua a base para
-atualizar o painel: isso cria uma nova execução com todos os status Pendentes.
-Atualize a Tracking existente durante o dia e conserve os nomes/linhas da base.
+Em casos com a mesma data e hora de abertura, a ordem original da base é
+preservada.
+
+CASES EM ESPERA
+
+O arquivo:
+
+Cases_em_espera.txt
+
+permite informar cases que não devem entrar na distribuição atual.
+
+Informe um número por linha.
+
+A identificação desses cases não é automática. A aba Resumo informa quais
+foram encontrados na base e quais números da lista não estavam presentes.
+
+CAMPOS DA TRACKING
+
+CASE
+DATA DE ABERTURA
+DATA DE MODIFICAÇÃO
+STATUS
+MOTIVO
+OBSERVAÇÃO
+RESPONSÁVEL
+
+Apenas o número do case e as datas são importados para a tracking.
+
+DATA DE MODIFICAÇÃO corresponde ao valor presente na base de entrada e não
+representa alterações realizadas posteriormente na tracking.
+
+PAINEL
+
+Na aba Gestor, é possível visualizar toda a equipe ou selecionar um
+responsável específico.
+
+O painel apresenta, entre outros indicadores:
+
+- cases distribuídos;
+- concluídos;
+- ainda abertos;
+- pendentes;
+- em andamento;
+- para revisão;
+- escalados;
+- percentual de conclusão;
+- abertura mais antiga ainda em aberto.
+
+PDF
+
+Na aba Gestor, clique em:
+
+GERAR RESUMO PDF
+
+O botão utiliza VBA e precisa do Excel instalado no computador.
+
+Também existe a alternativa:
+
+Gerar_PDF.bat
+
+Essa opção utiliza os dados salvos na tracking e gera um relatório consolidado.
+
+ATUALIZAÇÃO DE TRACKING
+
+Atualizar_Painel.bat permite atualizar uma tracking compatível para o painel
+mais recente sem redistribuir os cases ou apagar os dados preenchidos.
 
 REQUISITOS
-Windows, Python 3.10+ já disponível e Excel 2019+ / Microsoft 365 instalado
-para o botão de PDF. A pasta recursos também deve acompanhar o programa.
-Bibliotecas acompanham o programa; nenhuma instalação, rede ou permissão de
-administrador é solicitada na execução. Para o PDF, são usadas as fontes Arial
-já presentes no Windows. Extraia a pasta bibliotecas junto dos scripts.
-O Creatio continua sendo o sistema oficial. A ferramenta não altera nada nele.
 
-REFERÊNCIA MICROSOFT SOBRE VBA NO NAVEGADOR
-https://support.microsoft.com/en-us/excel/work-with-vba-macros-in-excel-for-the-web
+- Windows
+- Python 3.10 ou superior
+- Excel 2019 ou Microsoft 365 para o botão de PDF
+
+As bibliotecas utilizadas acompanham a pasta Programa.
+
+A execução não instala pacotes, não utiliza rede e não solicita privilégios
+administrativos.
+
+LIMITAÇÕES
+
+A versão atual não possui:
+
+- autenticação;
+- controle de acesso por responsável;
+- registro automático de início e pausa;
+- cálculo automático do tempo de tratamento;
+- integração com sistemas externos;
+- execução agendada.
+
+O painel é alimentado pelas informações preenchidas na própria tracking.
