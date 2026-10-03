@@ -1,4 +1,4 @@
-﻿TRACKING DE CASES - VERSÃO 3.0
+﻿TRACKING DE CASES - VERSÃO 3.1
 
 INICIAR
 
@@ -16,6 +16,9 @@ Exibe indicadores, progresso, alertas e filtro por responsável ou equipe.
 
 Tracking
 Contém os cases distribuídos e os campos utilizados durante o acompanhamento.
+
+SLA
+Mostra prazo por case e permite cadastrar feriados.
 
 Resumo
 Registra a distribuição inicial, a base de entrada, os cases em espera e as
@@ -109,24 +112,58 @@ O painel apresenta, entre outros indicadores:
 - percentual de conclusão;
 - abertura mais antiga ainda em aberto.
 
+SLA DE 4 DIAS ÚTEIS
+
+O prazo termina às 23:59:59 do quarto dia útil após a abertura. O próprio dia
+de abertura, sábados, domingos e feriados cadastrados não entram na contagem.
+
+Sem feriados, um case aberto em 25/09/2026 vence ao fim de 01/10/2026.
+Se continuar aberto em 02/10/2026, estará vencido.
+
+No Gestor, selecione Toda a equipe ou um responsável e consulte:
+- prazo após hoje;
+- vencem hoje;
+- SLA vencido;
+- datas inválidas ou futuras que precisam de correção.
+
+Esses grupos somam os abertos do filtro selecionado. Escalados e cases para
+revisão continuam no SLA. Concluídos ficam fora do SLA em aberto.
+Sem data de conclusão, não há avaliação histórica dos finalizados.
+
+A aba SLA mostra o lote completo, com filtros próprios, PRAZO ATÉ, DIAS ÚTEIS,
+FAIXA SLA e SITUAÇÃO DO SLA. D0 a D4 contam dias úteis do calendário desde o dia
+seguinte à abertura, incluindo o dia atual quando útil; não medem horas.
+
+Cadastre até 100 feriados em SLA!K10:K109, um por linha, como datas do Excel.
+Cada novo lote começa com a lista vazia. Sem cadastro, apenas fins de semana
+são descontados. A atualização do painel preserva os feriados já preenchidos.
+
+Com cálculo automático ativo, as fórmulas atualizam ao abrir, editar ou usar
+F9. O relógio não muda continuamente em um arquivo parado. Confira o instante
+do cálculo indicado no painel.
+
 PDF
 
 Na aba Gestor, clique em:
 
 GERAR RESUMO PDF
 
-O botão utiliza VBA e precisa do Excel instalado no computador.
+O botão utiliza VBA e precisa do Excel instalado e macros permitidas.
+O PDF respeita o filtro do Gestor e inclui o bloco de SLA em outra página.
 
 Também existe a alternativa:
 
 Gerar_PDF.bat
 
-Essa opção utiliza os dados salvos na tracking e gera um relatório consolidado.
+Essa opção utiliza todos os dados salvos na tracking e gera um resumo
+operacional, sem o filtro do Gestor e sem o bloco de SLA.
 
 ATUALIZAÇÃO DE TRACKING
 
-Atualizar_Painel.bat permite atualizar uma tracking compatível para o painel
-mais recente sem redistribuir os cases ou apagar os dados preenchidos.
+Atualizar_Painel.bat aceita uma tracking compatível .xlsx ou .xlsm, com as
+abas Tracking e Resumo, os sete cabeçalhos originais e a equipe registrada.
+Cria uma nova cópia .xlsm em Painel_SLA_<execucao>, com painel e SLA atualizados,
+preservando os dados preenchidos e os feriados, sem redistribuir os cases.
 
 REQUISITOS
 

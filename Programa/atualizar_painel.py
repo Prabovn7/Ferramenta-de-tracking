@@ -1,4 +1,4 @@
-"""Atualiza o painel da versão 2 sem redistribuir nem zerar o atendimento."""
+"""Acrescenta o painel com SLA sem redistribuir nem zerar o atendimento."""
 from pathlib import Path
 from datetime import datetime
 from uuid import uuid4
@@ -12,13 +12,13 @@ from incluir_botao_pdf import incluir_botao
 
 
 def atualizar(origem, pasta=None):
-    if origem.suffix.lower()!='.xlsx' or not origem.is_file():
-        raise ErroBase('Use o arquivo .xlsx da versão 2, com Tracking e Resumo.')
+    if origem.suffix.lower() not in ('.xlsx','.xlsm') or not origem.is_file():
+        raise ErroBase('Use uma tracking .xlsx ou .xlsm, com Tracking e Resumo.')
     w=load_workbook(origem,keep_links=False)
     tmp=None
     try:
         if not {'Tracking','Resumo'}.issubset(w.sheetnames):
-            raise ErroBase('A planilha precisa ter as abas Tracking e Resumo da versão 2.')
+            raise ErroBase('A planilha precisa ter as abas Tracking e Resumo.')
         if [c.value for c in w['Tracking'][1]]!=CABECALHOS:
             raise ErroBase('O cabeçalho da Tracking foi alterado. Confira as sete colunas.')
         resumo=w['Resumo'];qtd=resumo['F12'].value
@@ -32,7 +32,7 @@ def atualizar(origem, pasta=None):
         desenhar(g,resumo,nomes,w)
         w.active=0
         w.calculation=CalcProperties(calcId=191029,fullCalcOnLoad=True,forceFullCalc=True,calcMode='auto')
-        pasta=pasta or origem.parent/('Painel_v3_'+datetime.now().strftime('%Y-%m-%d_%H-%M-%S_')+uuid4().hex[:6])
+        pasta=pasta or origem.parent/('Painel_SLA_'+datetime.now().strftime('%Y-%m-%d_%H-%M-%S_')+uuid4().hex[:6])
         pasta.mkdir(parents=True,exist_ok=True)
         destino=pasta/(origem.stem+'.xlsm')
         if destino.exists():raise ErroBase('A saída já existe. Escolha uma nova pasta.')
@@ -45,12 +45,12 @@ def atualizar(origem, pasta=None):
 
 
 def main():
-    p=argparse.ArgumentParser(description='Atualiza o painel preservando os atendimentos da versão 2.')
+    p=argparse.ArgumentParser(description='Acrescenta o SLA preservando os atendimentos existentes.')
     p.add_argument('arquivo',nargs='?');p.add_argument('--saida',type=Path);p.add_argument('--sem-pausa',action='store_true')
     a=p.parse_args();code=0
     try:
         print('ATUALIZAR PAINEL | Os status e dados da Tracking serão preservados.')
-        f=caminho_local(a.arquivo or input('Cole o caminho da planilha .xlsx da versão 2: '))
+        f=caminho_local(a.arquivo or input('Cole o caminho da tracking .xlsx ou .xlsm: '))
         print(f'Nova planilha:\n{atualizar(f,a.saida).resolve()}')
     except (KeyboardInterrupt,EOFError):code=130
     except Exception as exc:print(f'Não foi possível atualizar: {exc}');code=1

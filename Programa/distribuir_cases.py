@@ -376,7 +376,7 @@ def main() -> int:
         for nome in nomes:
             print(f"  {nome}: {totais[nome]} cases")
         print(f"\nExcel gerado:\n{arquivo.resolve()}")
-        print("\nA planilha contém as abas Gestor, Tracking e Resumo.")
+        print("\nA planilha contém as abas Gestor, Tracking, Resumo e SLA.")
         print("Atualize o STATUS pela lista da aba Tracking; o painel Gestor acompanha.")
         print("Para gerar o PDF, abra no Excel instalado e clique em GERAR RESUMO PDF.")
     except (KeyboardInterrupt, EOFError):

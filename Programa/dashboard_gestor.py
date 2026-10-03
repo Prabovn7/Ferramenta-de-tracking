@@ -4,12 +4,14 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.pagebreak import Break
 from painel_gestor import texto, fundo, BG, CARD, TEXT, MUTED, TEAL, AMBER, BLUE, PURPLE
 
 
 def desenhar(gestor, resumo, nomes, livro):
     n=len(nomes)
-    bottom=max(32,24+n)
+    sla_inicio=max(29,22+n)
+    bottom=sla_inicio+15
     fundo(gestor,bottom,23)
     for c in range(2,23):gestor.column_dimensions[get_column_letter(c)].width=8.3
     gestor.column_dimensions['W'].width=3
@@ -17,8 +19,9 @@ def desenhar(gestor, resumo, nomes, livro):
     gestor.sheet_view.zoomScale=90
     gestor.sheet_view.showRowColHeaders=False
     gestor.print_area=f'A1:W{bottom}'
-    gestor.page_setup.fitToHeight=1 if n<=10 else 0
-    gestor.print_title_rows='19:20' if n>15 else None
+    gestor.page_setup.fitToHeight=0
+    gestor.print_title_rows=None
+    gestor.row_breaks.append(Break(id=sla_inicio-1))
     texto(gestor,'B2:O3','Visão da operação',26,TEXT,True)
     # Área reservada ao botão nativo (inserido no XLSM).
     texto(gestor,'R2:V3','',12,BG,True,BG,align='center')
@@ -89,7 +92,9 @@ def desenhar(gestor, resumo, nomes, livro):
     texto(gestor,'O25:T25','Sem responsável cadastrado¹',10,MUTED)
     texto(gestor,'U25:V25',f'=COUNTA({ids})-SUM(F21:F{20+n})',12,AMBER,True)
     texto(gestor,'O26:V27','¹ Alerta da equipe inteira. Corrija os campos indicados na Tracking.',9,MUTED)
-    nav=max(29,22+n)
+    from sla_cases import acrescentar_sla
+    acrescentar_sla(livro,gestor,sla_inicio)
+    nav=sla_inicio+12
     c=texto(gestor,f'B{nav}:F{nav+1}','ABRIR TRACKING  →',11,TEAL,True,CARD,align='center');c.hyperlink="#'Tracking'!A1"
     c=texto(gestor,f'H{nav}:M{nav+1}','DISTRIBUIÇÃO INICIAL  →',11,TEAL,True,CARD,align='center');c.hyperlink="#'Resumo'!B2"
     texto(gestor,f'O{nav}:V{nav+1}','PDF = visão atual do painel, incluindo o filtro selecionado.',10,MUTED)

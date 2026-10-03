@@ -2,6 +2,7 @@
 Programa/Saidas/
 **/Relatorios_PDF/
 **/Painel_v3_*/
+**/Painel_SLA_*/
 
 # Planilhas
 *.xlsx
@@ -10,10 +11,8 @@ Programa/Saidas/
 *.xls
 *.csv
 
-# Relatórios
+# Relatórios e arquivos temporários
 *.pdf
-
-# Arquivos temporários
 ~$*
 __pycache__/
 *.py[cod]
