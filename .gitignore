@@ -20,3 +20,4 @@ __pycache__/
 # Ambientes e configurações locais
 .venv/
 .env
+CLAUDE.MD
